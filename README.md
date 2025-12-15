@@ -272,18 +272,18 @@ where \(\phi_{\text{emp}}(t) = \frac{1}{N} \sum_{i=1}^{N} e^{i t (z_i \cdot a)}\
 - Final training loss: [INSERT FINAL LOSS VALUE]
 
 **Loss Curve:**
-[outputs/model2/model2_loss.png  - chart:3]
+![Model2 Loss](outputs/model2/model2_loss.png)
 
 **Anomaly Detection (Top 10):**
-[outputs/model2/model2_top25anomalies.png - chart:4]
+![](outputs/model2/model2_top25anomalies.png)
 
 **Linear Probe Score:** [50] % (Significantly lower than Model 1)
 
 **Latent Space Visualization (t-SNE):**
-[outputs/model3/model3_latentspace.png - image:1]
+![](outputs/model3/model3_latentspace.png)
 
 **Cosine Similarity Heatmaps (Sample Galaxy):**
-[outputs/model2/model2_patch_mse.png | Predicted vs. Target Similarity Heatmap | MSE Heatmap - image:3]
+[Predicted vs. Target Similarity Heatmap | MSE Heatmap](outputs/model2/model2_patch_mse.png)
 
 **Key Observation:** Extended training without regularization exacerbates collapse. Demonstrates necessity of SIGReg.
 
@@ -299,18 +299,18 @@ where \(\phi_{\text{emp}}(t) = \frac{1}{N} \sum_{i=1}^{N} e^{i t (z_i \cdot a)}\
 - Final training loss: [INSERT COMBINED LOSS VALUE]
 
 **Loss Curve (Prediction vs. SIGReg):**
-[outputs/model3/model3_loss.png - chart:5]
+![](outputs/model3/model3_loss.png)
 
 **Anomaly Detection (Top 10):**
-[outputs/model3/model3_top25anomalies.png - chart:6]
+![](outputs/model3/model3_top25anomalies.png)
 
 **Linear Probe Score:** [45] % (Significant improvement over Models 1 & 2)
 
 **Latent Space Visualization (t-SNE):**
-[outputs/model3/model3_latentspace.png - image:1]
+![](outputs/model3/model3_latentspace.png)
 
 **Cosine Similarity Heatmaps (Sample Galaxy):**
-[outputs/model3/model3_patch_mse.png | Predicted vs. Target Similarity Heatmap | MSE Heatmap - image:3]
+![](outputs/model3/model3_patch_mse.png)
 
 **Key Observation:** Hybrid approach stabilizes training and preserves semantic information. SIGReg contribution clear.
 
@@ -326,19 +326,19 @@ where \(\phi_{\text{emp}}(t) = \frac{1}{N} \sum_{i=1}^{N} e^{i t (z_i \cdot a)}\
 - Final training loss: [INSERT VALUE]
 
 **Loss Curve (Training Loss as Downstream Proxy):**
-[outputs/model4/model4_loss.png - chart:7]
+![](outputs/model4/model4_loss.png)
 
 **Anomaly Detection (Top 25):**
-[outputs/model4/model4_top25anomalies.png - chart:8]
+![](outputs/model4/model4_top25anomalies.png)
 
 **Linear Probe Score (Frozen Backbone):** [59.13] % Top-1
 
 
 **Latent Space Visualization (PCA):**
-[outputs/model4/model4_latentspace.png - image:2]
+![](outputs/model4/model4_latentspace.png)
 
 **Cosine Similarity Heatmaps (Sample Galaxy):**
-[outputs/model4/model4_patch_mse.png | Predicted vs. Target Similarity Heatmap | MSE Heatmap - image:3]
+![](outputs/model4/model4_patch_mse.png)
 
 **Key Observations:**
 - Highest linear probe accuracy among all models
@@ -357,18 +357,18 @@ where \(\phi_{\text{emp}}(t) = \frac{1}{N} \sum_{i=1}^{N} e^{i t (z_i \cdot a)}\
 - Final training loss: [INSERT VALUE]
 
 **Loss Curve:**
-[outputs/model5/model5_loss.png - chart:9]
+![](outputs/model5/model5_loss.png)
 
 **Anomaly Detection (Top 25):**
-[outputs/model5/model5_top25anomalies.png - chart:10]
+![](outputs/model5/model5_top25anomalies.png)
 
 **Linear Probe Score (Frozen Backbone):** [57.1] %
 
 **Latent Space Visualization (PCA):**
-[outputs/model5/model5_latentspace.png - image:2]
+![](outputs/model5/model5_latentspace.png)
 
 **Cosine Similarity Heatmaps (Sample Galaxy):**
-[outputs/model5/model5_patch_mse.png | Predicted vs. Target Similarity Heatmap | MSE Heatmap - image:3]
+![](outputs/model5/model5_patch_mse.png)
 
 **Key Observation:** λ=0.01 works alright but slightly highier values of lambda could perform better. Demonstrates necessity of stronger regularization.
 
