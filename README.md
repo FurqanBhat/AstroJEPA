@@ -105,7 +105,6 @@ where \(\text{EppsPulley}\) compares empirical characteristic functions and \(A\
 | **Model 4** | ViT-Small (25.3M) | 25.3M | 100 | I-JEPA + SIGReg | 0.6 (strong) | 60% | ✓ Trained |
 | **Model 5** | ViT-Small (25.3M) | 25.3M | 100 | I-JEPA + Slight SIGReg | 0.01 (faint) | 55% | ✓ Trained |
 
-```
 
 ### Prediction Loss Details
 
