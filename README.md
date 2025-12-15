@@ -101,22 +101,10 @@ where \(\text{EppsPulley}\) compares empirical characteristic functions and \(A\
 |:---|:---|:---:|:---:|:---|:---:|:---|:---|
 | **Model 1** | ViT-Base (5.5M) | 5.5M | 100 | Pure I-JEPA | — | 30% | ✓ Trained |
 | **Model 2** | ViT-Base (5.5M) | 5.5M | 300 | Pure I-JEPA | — | 40% | ✓ Trained |
-| **Model 3** | ViT-Base (5.5M) | 5.5M | 100 | I-JEPA + SIGReg | 0.6 (strong) | 40% | ✓ Trained |
-| **Model 4** | ViT-Small (25.3M) | 25.3M | 100 | LeJEPA (full) | 0.6 (strong) | 60% | ✓ Trained |
-| **Model 5** | ViT-Small (25.3M) | 25.3M | 100 | LeJEPA (full) | 0.01 (faint) | 55% | ✓ Trained |
+| **Model 3** | ViT-Base (5.5M) | 5.5M | 300 | I-JEPA + SIGReg | 0.6 (strong) | 50% | ✓ Trained |
+| **Model 4** | ViT-Small (25.3M) | 25.3M | 100 | I-JEPA + SIGReg | 0.6 (strong) | 60% | ✓ Trained |
+| **Model 5** | ViT-Small (25.3M) | 25.3M | 100 | I-JEPA + Slight SIGReg | 0.01 (faint) | 55% | ✓ Trained |
 
-### Training Hyperparameters (Unified Across All Models)
-
-```
-Optimizer:           AdamW (lr=1.5e-4, weight_decay=0.04)
-Batch Size:          256 (Galaxy10 training set: 17,736 images)
-Image Resolution:    224×224 (center-cropped from 256×256)
-Warmup Epochs:       40 (linear)
-Schedule:            Cosine annealing with final lr = 1.5e-5
-Context Block Scale: [0.85, 1.0] with unit aspect ratio
-Target Block Scale:  4 blocks per image, scale ∈ [0.15, 0.2], aspect ratio ∈ [0.75, 1.5]
-Masking Strategy:    Brightness-biased semantic masking (galaxy-aware)
-Target Encoder EMA:  τ = 0.999 (exponential moving average update)
 ```
 
 ### Prediction Loss Details
@@ -243,41 +231,23 @@ where \(\phi_{\text{emp}}(t) = \frac{1}{N} \sum_{i=1}^{N} e^{i t (z_i \cdot a)}\
 
 ## 📈 Experimental Results
 
-### Model 1: I-JEPA (5.5M params, 100 epochs)
-**File:** `100jepa.pth`
-
-**Training Dynamics:**
-- Training loss converges smoothly in first 30 epochs
-- Stagnates at epoch ~40, indicating representation collapse onset
-- Final training loss: [INSERT FINAL LOSS VALUE]
-
-**Loss Curve:**
-[INSERT LOSS CURVE IMAGE HERE - chart:1]
-
-**Anomaly Detection (Top 10 Anomalous Galaxies):**
-[INSERT TOP 10 ANOMALIES TABLE/VISUALIZATION HERE - chart:2]
-
-**Linear Probe Score (Frozen Backbone):** [INSERT VALUE] % Top-1 Accuracy
-
-**Key Observation:** Low linear probe accuracy despite low training loss suggests the model learned non-semantic features due to collapse.
-
----
 
 ### Model 2: I-JEPA Extended (5.5M params, 300 epochs)
 **File:** `300cosmic_jepa_latest.pth`
 
 **Training Dynamics:**
-- Loss continues decreasing but plateaus after epoch 150
+- Loss decreases drastically, then increases and then finally decreases again but plateaus after epoch 150
 - Severe collapse confirmed by constant near-zero cosine similarities in latent space
-- Final training loss: [INSERT FINAL LOSS VALUE]
+- Final training loss: [0.0705]
+- Final validation loss: [0.0334]
 
 **Loss Curve:**
 ![Model2 Loss](outputs/model2/model2_loss.png)
 
-**Anomaly Detection (Top 10):**
+**Anomaly Detection (Top 25):**
 ![](outputs/model2/model2_top25anomalies.png)
 
-**Linear Probe Score:** [40] % (Significantly lower than Model 1)
+**Linear Probe Score:** [40] % (better than Model 1)
 
 **Latent Space Visualization (t-SNE):**
 ![](outputs/model3/model3_latentspace.png)
@@ -285,18 +255,16 @@ where \(\phi_{\text{emp}}(t) = \frac{1}{N} \sum_{i=1}^{N} e^{i t (z_i \cdot a)}\
 **Cosine Similarity Heatmaps (Sample Galaxy):**
 ![Predicted vs. Target Similarity Heatmap | MSE Heatmap](outputs/model2/model2_patch_mse.png)
 
-**Key Observation:** Extended training without regularization exacerbates collapse. Demonstrates necessity of SIGReg.
+**Key Observation:** Extended training without regularization improves probe accuracy but it's still low.
 
 ---
 
-### Model 3: I-JEPA + SIGReg Hybrid (5.5M params, 100 epochs, λ=0.6)
+### Model 3: I-JEPA + SIGReg Hybrid (5.5M params, 300 epochs, λ=0.6)
 **File:** `100ijepa_segreg.pth`
 
 **Training Dynamics:**
-- SIGReg loss (red) starts high, decreases smoothly to [INSERT VALUE]
-- Prediction loss (blue) remains stable around [INSERT VALUE]
-- Trade-off well-balanced; no evidence of collapse
-- Final training loss: [INSERT COMBINED LOSS VALUE]
+- Final training loss: [0.1279]
+- Final Validation loss: [0.0594]
 
 **Loss Curve (Prediction vs. SIGReg):**
 ![](outputs/model3/model3_loss.png)
@@ -304,7 +272,7 @@ where \(\phi_{\text{emp}}(t) = \frac{1}{N} \sum_{i=1}^{N} e^{i t (z_i \cdot a)}\
 **Anomaly Detection (Top 25):**
 ![](outputs/model3/model3_top25anomalies.png)
 
-**Linear Probe Score:** [50] % (Significant improvement over Models 1 & 2)
+**Linear Probe Score:** [52] % (Significant improvement over Models 1 & 2)
 
 **Latent Space Visualization (t-SNE):**
 ![](outputs/model3/model3_latentspace.png)
@@ -320,12 +288,15 @@ where \(\phi_{\text{emp}}(t) = \frac{1}{N} \sum_{i=1}^{N} e^{i t (z_i \cdot a)}\
 **File:** `25.3M_100EP_ViT_strong_SIGReg.pth`
 
 **Training Dynamics:**
-- Stable, smooth convergence over 100 epochs
-- Loss exhibits strong correlation with downstream performance (Spearman ρ ≈ 0.94)
-- Larger model benefits from SIGReg; collapse-free training confirmed
-- Final training loss: [INSERT VALUE]
+- Training loss decreases drastically while validation loss increases for first 20 epochs implying overfitting.
+- After epoch 20, both training and validation loss star decreasing and the loss plateaus around epoch 65
+- Loss exhibits strong correlation with downstream performance.
+- Larger model benefits from SIGReg; Better Accuracy detected.
+- Final training loss: [0.1252]
+- Final validation loss: [0.0337]
+- Final SIGReg loss: [0.1112]
 
-**Loss Curve (Training Loss as Downstream Proxy):**
+**Loss Curve:**
 ![](outputs/model4/model4_loss.png)
 
 **Anomaly Detection (Top 25):**
@@ -342,7 +313,7 @@ where \(\phi_{\text{emp}}(t) = \frac{1}{N} \sum_{i=1}^{N} e^{i t (z_i \cdot a)}\
 
 **Key Observations:**
 - Highest linear probe accuracy among all models
-- Rich latent structure visible in PCA (clear class separation)
+- Rich latent structure visible in PCA
 - Anomaly scores identify rare morphologies (mergers, distorted galaxies)
 
 ---
@@ -353,8 +324,9 @@ where \(\phi_{\text{emp}}(t) = \frac{1}{N} \sum_{i=1}^{N} e^{i t (z_i \cdot a)}\
 **Training Dynamics:**
 - Low SIGReg weight (λ=0.01) reduces regularization strength
 - Prediction loss dominates (≈99% of total loss)
-- Shows subtle signs of dimensional collapse (some dimensions underutilized)
-- Final training loss: [INSERT VALUE]
+- Final training loss: [0.0523]
+- Final validation loss: [0.1112]
+- Final SIGReg loss: [0.1536]
 
 **Loss Curve:**
 ![](outputs/model5/model5_loss.png)
@@ -388,7 +360,7 @@ where \(\phi_{\text{emp}}(t) = \frac{1}{N} \sum_{i=1}^{N} e^{i t (z_i \cdot a)}\
 
 **Models 3–5** with SIGReg show:
 - Smooth, stable training curves
-- Training loss strongly correlates with downstream accuracy (Spearman ρ ≈ 0.94 for Model 4)
+- Training loss strongly correlates with downstream accuracy
 - Rich, well-separated latent space (visible in t-SNE/PCA)
 
 **Conclusion:** SIGReg mathematically enforces embedding isotropy, eliminating collapse by design rather than heuristic safeguards.
@@ -417,15 +389,6 @@ where \(\phi_{\text{emp}}(t) = \frac{1}{N} \sum_{i=1}^{N} e^{i t (z_i \cdot a)}\
 
 ---
 
-### 4. Domain-Specific SSL > Generic Transfer Learning
-
-**Comparison vs. DINOv2 (pre-trained on ImageNet-1K):**
-- LeJEPA (Model 4, Galaxy10-pretrained, frozen): [Val] % Top-1
-- DINOv2-Small (ImageNet transfer): ~[Val] % Top-1
-
-**Implication:** Principled SSL on small domain-specific datasets beats transfer from massive foundation models, validating in-domain pretraining hypothesis.
-
----
 
 ### 5. Anomaly Detection Reveals Morphological Diversity
 
@@ -437,13 +400,7 @@ Top 10 anomalous galaxies consistently include:
 
 **Utility:** Anomaly scores from [Model 4] effectively identify astrophysically interesting outliers without supervised labels.
 
----
 
-### 6. Loss-Performance Correlation: Novel Model Selection Signal
-
-**Key Finding (Model 4):** LeJEPA training loss exhibits Spearman ρ = 0.94 correlation with frozen-backbone linear probe accuracy.
-
-**Significance:** Enables **label-free model selection**—practitioners can halt training when loss plateaus without need for supervised validation set. This is critical for edge-computing astronomical surveys with no labeled data.
 
 ---
 
