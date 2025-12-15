@@ -277,13 +277,13 @@ where \(\phi_{\text{emp}}(t) = \frac{1}{N} \sum_{i=1}^{N} e^{i t (z_i \cdot a)}\
 **Anomaly Detection (Top 10):**
 ![](outputs/model2/model2_top25anomalies.png)
 
-**Linear Probe Score:** [50] % (Significantly lower than Model 1)
+**Linear Probe Score:** [40] % (Significantly lower than Model 1)
 
 **Latent Space Visualization (t-SNE):**
 ![](outputs/model3/model3_latentspace.png)
 
 **Cosine Similarity Heatmaps (Sample Galaxy):**
-[Predicted vs. Target Similarity Heatmap | MSE Heatmap](outputs/model2/model2_patch_mse.png)
+![Predicted vs. Target Similarity Heatmap | MSE Heatmap](outputs/model2/model2_patch_mse.png)
 
 **Key Observation:** Extended training without regularization exacerbates collapse. Demonstrates necessity of SIGReg.
 
@@ -301,10 +301,10 @@ where \(\phi_{\text{emp}}(t) = \frac{1}{N} \sum_{i=1}^{N} e^{i t (z_i \cdot a)}\
 **Loss Curve (Prediction vs. SIGReg):**
 ![](outputs/model3/model3_loss.png)
 
-**Anomaly Detection (Top 10):**
+**Anomaly Detection (Top 25):**
 ![](outputs/model3/model3_top25anomalies.png)
 
-**Linear Probe Score:** [45] % (Significant improvement over Models 1 & 2)
+**Linear Probe Score:** [50] % (Significant improvement over Models 1 & 2)
 
 **Latent Space Visualization (t-SNE):**
 ![](outputs/model3/model3_latentspace.png)
